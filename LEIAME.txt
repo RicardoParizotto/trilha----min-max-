@@ -28,7 +28,7 @@ O programa mostrará o tabuleiro e as respectivas jogadas.
 Para utilização das funções minimax e poda_alpha_beta deve-se incluir o arquivo "include/defs.h".
 5.1. Função minimax
     5.1.1 - Protótipo:
-        int minimax(int *tab,Jogada *jogada, int profundidade, int jor, int fase);
+        int minimax(int *tab,Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
     5.1.2 - Descrição:
         A variável tab é o vetor que representa o tabuleiro
         A jogada uma estrutura definida na descrição do trabalho que representa um estado e é modificada pela execução da minimax
@@ -39,7 +39,7 @@ Para utilização das funções minimax e poda_alpha_beta deve-se incluir o arqu
 
 5.2. Função de poda alpha-beta
     5.2.1 - Protótipo:
-        int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int jor, int fase, int alpha, int beta);
+        int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase, int alpha, int beta);
     5.2.2 - Descrição:
         A variável tab é o vetor que representa o tabuleiro
         A jogada uma estrutura definida na descrição do trabalho que representa um estado e é modificada pela execução da minimax

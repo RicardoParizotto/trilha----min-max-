@@ -11,8 +11,6 @@
 #include <cstdio>
 using namespace std;
 
-#define MAX_DEPTH 4
-
 bool moinho_feito(int * tab, int peca, int peca_orig, int jor)  {
   for(int i = 0; i < N_MOINHOS; i++) {
     int soma = 0;
@@ -113,12 +111,12 @@ int heuristicas_jogador_fase1_fase3(int * tab, int jor, int profundidade){    //
 /* 
     Função de jogada utilizando o algoritmo minimax
 */
-int minimax(int * tab, Jogada *jogada, int profundidade, int jor, int fase){
+int minimax(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase){
     int maxmin = -infinite, temp, i, k, q, tab2[TAM_TABULEIRO], adv = proximoJogador(jor);
     Jogada jogada2;
     bool nodomax = !(profundidade % 2), remocao;
 
-    if(profundidade == MAX_DEPTH){ jogada->nnodes++; return ((fase != FASEINSERCAOPECAS)?(heuristicas_jogador_fase2(tab, (nodomax)? (jor):(adv), profundidade)):(heuristicas_jogador_fase1_fase3(tab, (nodomax)?(jor):(adv), profundidade)));}
+    if(profundidade == max_prof){ jogada->nnodes++; return ((fase != FASEINSERCAOPECAS)?(heuristicas_jogador_fase2(tab, (nodomax)? (jor):(adv), profundidade)):(heuristicas_jogador_fase1_fase3(tab, (nodomax)?(jor):(adv), profundidade)));}
 
     /*se estiver em uma folha e a fase não for inicial calcula a heuristica para a
      * segunda etapa do jogo. Caso contrário, a outra heurística (fase de inserir e de pular)
@@ -150,7 +148,7 @@ int minimax(int * tab, Jogada *jogada, int profundidade, int jor, int fase){
                     }
                     jogada2.ret = pmin;
                 }
-                temp = minimax(tab2, jogada , profundidade + 1, adv, fase);
+                temp = minimax(tab2, jogada , profundidade + 1, max_prof, adv, fase);
                 if(maxmin < temp && nodomax || temp < maxmin && !nodomax){
                     maxmin = temp;
                     jogada2.orig = i;
@@ -169,12 +167,12 @@ int minimax(int * tab, Jogada *jogada, int profundidade, int jor, int fase){
 /* 
     Função de jogada utilizando a poda alfa-beta
 */
-int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int jor, int fase, int alpha, int beta){
+int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase, int alpha, int beta){
     int maxmin = -infinite, temp, i, k, q, tab2[TAM_TABULEIRO], adv = proximoJogador(jor);
     Jogada jogada2;
     bool nodomax = !(profundidade % 2), remocao;
 
-    if(profundidade == MAX_DEPTH) { jogada->nnodes++;return ((fase != FASEINSERCAOPECAS)?(heuristicas_jogador_fase2(tab, (nodomax)? (jor):(adv), profundidade)):(heuristicas_jogador_fase1_fase3(tab, (nodomax)?(jor):(adv), profundidade)));}
+    if(profundidade == max_prof) { jogada->nnodes++;return ((fase != FASEINSERCAOPECAS)?(heuristicas_jogador_fase2(tab, (nodomax)? (jor):(adv), profundidade)):(heuristicas_jogador_fase1_fase3(tab, (nodomax)?(jor):(adv), profundidade)));}
 
     /*se estiver em uma folha e a fase não for inicial calcula a heuristica para a
      * segunda etapa do jogo. Caso contrário, a outra heurística (fase de inserir e de pular)
@@ -209,7 +207,7 @@ int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int jor, int fa
                 
                 if(alpha >= beta){maxmin = (nodomax)?alpha:beta; goto retorno;}  
                  
-                temp = minimax(tab2, jogada , profundidade + 1, adv, fase);
+                temp = poda_alpha_beta(tab2, jogada , profundidade + 1, max_prof, adv, fase, alpha, beta);
                     
                 if(maxmin < temp && nodomax || temp < maxmin && !nodomax){
                     maxmin = temp;

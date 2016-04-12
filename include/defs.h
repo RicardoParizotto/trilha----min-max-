@@ -64,9 +64,9 @@ int heuristicas_jogador_fase1_fase3(int * tab, int jor, int profundidade);
 
 int heuristicas_jogador_fase2(int * tab, int jor, int profundidade);
 
-int minimax(int *tab,Jogada *jogada, int profundidade, int jor, int fase);
+int minimax(int *tab,Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
 
-int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int jor, int fase, int alpha, int beta);
+int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase, int alpha, int beta);
 /*
 Jogada * jogaTrilhaMinMaxGrupo666(int *tab, int fase, int jor, int alt){
 

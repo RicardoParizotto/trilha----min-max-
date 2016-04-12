@@ -4,7 +4,7 @@ FLAGS=-fpermissive -O2
 DEBUG=-Wall -pedantic -g
 CPP=g++
 BIN_DIR=bin/
-LIBS_DIR=libs/
+LIBS_DIR=lib/
 NAME=trilha
 SOURCE_DIR=src/
 all:
@@ -15,3 +15,8 @@ debug:
 	
 libs:
 	$(CPP) -c $(SOURCE_DIR)jogo.cpp -o $(LIBS_DIR)jogo.o
+
+clean:
+	rm $(BIN_DIR)*
+	rm $(LIBS_DIR)*
+	
