@@ -25,8 +25,9 @@ Para executar basta executar o comando $ bin/trilha
 O programa mostrará o tabuleiro e as respectivas jogadas.
 
 5. Utilização das funções:
-Para utilização das funções minimax e poda_alpha_beta deve-se incluir o arquivo "include/defs.h".
-5.1. Função minimax
+Para utilização das funções minimax e poda_alpha_beta deve-se incluir o arquivo "include/defs.h" no cabeçalho do programa principal e 
+compilar o arquivo jogo.cpp juntamente com os outros arquivos fontes do programa.
+5.1. Funções minimax
     5.1.1 - Protótipo:
         int minimax(int *tab,Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
     5.1.2 - Descrição:
@@ -36,6 +37,19 @@ Para utilização das funções minimax e poda_alpha_beta deve-se incluir o arqu
         max_prof é um inteiro que limita a profundidade da busca
         jor é o jogador atual
         fase é um inteiro que representa a fase do jogo
+    5.1.3 - Minimax inserção
+        Uma função minimax para a fase de inserção de peças (início do jogo).
+        5.1.3.1 - Protótipo:
+            int minimax_insercao(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
+        5.1.3.2 - Descrição: 
+            As variáveis tem o mesmo significado que na função anterior.
+    5.1.4 - Minimax Salto
+        Função minimax para a fase de salto (quando o jogador fica com apenas 3 peças)
+        5.1.4.1 - Protótipo:
+            int minimax_salto(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
+        5.1.4.2 - Descrição: 
+            As variáveis tem o mesmo significado que na função anterior.
+        
 
 5.2. Função de poda alpha-beta
     5.2.1 - Protótipo:
