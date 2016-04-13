@@ -1,6 +1,6 @@
 /*
  * Universidade Federal da Fronteira Sul
- * Definição das estruturas principais e protótipos das funções utilizadas 
+ * Definição das estruturas principais e protótipos das funções utilizadas
  * Rafael Hengen Ribeiro, Ricardo Parizotto
  */
 
@@ -50,7 +50,7 @@ const int moinho[N_MOINHOS][3] =
   {8,12,17},{9,10,11},{12,13,14},
   {15,16,17},{16,19,22},{18,19,20},
   {21,22,23}};
-  
+
 /*
   tab é o tabuleiro: um vetor de inteiros de 24 posições
   fase é a fase do jogo: inserção de peças ou movimentação
@@ -70,5 +70,5 @@ int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, i
 
 int minimax_insercao(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int jog);
 
-
+int minimax_salto(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
 #endif

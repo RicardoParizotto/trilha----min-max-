@@ -1,4 +1,4 @@
-/* 
+/*
  * Universidade Federal da Fronteira Sul
  *Arquivo: jogo.cpp -> Contém as funções para jogada com minimax e poda alpha-beta
  *                          e o cálculo das heurísticas
@@ -54,7 +54,7 @@ int heuristicas_jogador_fase2(int * tab, int jor, int profundidade) {
         valor_moinho[i]+=1;
         for(e = 0; e < 3; e++){
            int w = jogadas_validas[i][e];
-          if(w > -1 && tab[w] == jor) 
+          if(w > -1 && tab[w] == jor)
             valor_moinho[i] += 3;
         }
       }
@@ -62,7 +62,7 @@ int heuristicas_jogador_fase2(int * tab, int jor, int profundidade) {
 
 
     if(valor_moinho[i] > 14)
-      valor_moinho[i] = 100;                        
+      valor_moinho[i] = 100;
     else if(valor_moinho[i] < -14)
       valor_moinho[i] = -100;                     // Heurística para impedir jogadas do inimigo
     heuristica_lixo+=valor_moinho[i];
@@ -108,7 +108,7 @@ int heuristicas_jogador_fase1_fase3(int * tab, int jor, int profundidade){    //
 
 
 
-/* 
+/*
     Função de jogada utilizando o algoritmo minimax
 */
 int minimax(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase){
@@ -168,7 +168,7 @@ int minimax_insercao(int * tab, Jogada *jogada, int profundidade, int max_prof, 
     int maxmin = -infinite, temp, i, k, q, tab2[TAM_TABULEIRO], adv = proximoJogador(jor);
     Jogada jogada2;
     bool nodomax = !(profundidade % 2), remocao;
-    
+
     for(q = 0; q < TAM_TABULEIRO; q++)tab2[q] = tab[q];//atualiza o tabuleiro para a futura jogada
 
     if(profundidade == max_prof){ jogada->nnodes++; return heuristicas_jogador_fase1_fase3(tab, (nodomax)?(jor):(adv), profundidade);}
@@ -215,7 +215,7 @@ int minimax_insercao(int * tab, Jogada *jogada, int profundidade, int max_prof, 
 
 
 
-/* 
+/*
     Função de jogada utilizando a poda alfa-beta
 */
 int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase, int alpha, int beta){
@@ -255,11 +255,11 @@ int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, i
                     }
                     jogada2.ret = pmin;
                 }
-                
-                if(alpha >= beta){maxmin = (nodomax)?alpha:beta; goto retorno;}  
-                 
+
+                if(alpha >= beta){maxmin = (nodomax)?alpha:beta; goto retorno;}
+
                 temp = poda_alpha_beta(tab2, jogada , profundidade + 1, max_prof, adv, fase, alpha, beta);
-                    
+
                 if(maxmin < temp && nodomax || temp < maxmin && !nodomax){
                     maxmin = temp;
                     jogada2.orig = i;
@@ -279,3 +279,59 @@ int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, i
 
     return maxmin;
 }
+
+int minimax_salto(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase){
+    int maxmin = -infinite, temp, j, i, q, tab2[TAM_TABULEIRO], adv = proximoJogador(jor);
+    Jogada jogada2;
+    bool nodomax = !(profundidade % 2), remocao;
+
+    if(profundidade == max_prof){
+        jogada->nnodes++;
+        return heuristicas_jogador_fase2(tab, (nodomax)? (jor):(adv), profundidade);
+    }
+
+    if(!nodomax)
+        maxmin = infinite;
+
+    for(i = 0;i < TAM_TABULEIRO; i++){
+        if(tab[i] == jor){
+            for (j = 0; j < TAM_TABULEIRO; j++){
+                if(tab[j] == VAZIO){
+                    for(q = 0; q < TAM_TABULEIRO; q++)
+                        tab2[q] = tab[q];//atualiza o tabuleiro para a futura jogada
+                    tab2[i] = VAZIO;
+                    tab2[j] = jor;
+                    if(moinho_feito(tab2, j, i, jor))   { // remove a peça que deixa a heurística do oponente menor
+                        int tmp, adv_min = infinite;
+                        int pmin = -1;
+                        for(q = 0; q < TAM_TABULEIRO; q++){
+                            if(tab2[q] == adv){
+                                tab2[q] = VAZIO;
+                                tmp = heuristicas_jogador_fase2(tab2, adv, profundidade);
+                                if(tmp < adv_min)  {
+                                    adv_min = tmp;
+                                    pmin = q;
+                                }
+                                tab2[q] = adv;
+                            }
+                        }
+                        jogada2.ret = pmin;
+                    }
+                    temp = minimax_salto(tab2, jogada , profundidade + 1, max_prof, adv, fase);
+                    if(maxmin < temp && nodomax || temp < maxmin && !nodomax){
+                        maxmin = temp;
+                        jogada2.orig = i;
+                        jogada2.dest = j;
+                    }
+                }
+            }
+        }
+    }
+    jogada->dest = jogada2.dest;
+    jogada->orig = jogada2.orig;
+    jogada->ret = jogada2.ret;
+
+    return maxmin;
+}
+
+
