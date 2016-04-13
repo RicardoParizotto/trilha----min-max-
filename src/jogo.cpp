@@ -62,9 +62,9 @@ int heuristicas_jogador_fase2(int * tab, int jor, int profundidade) {
 
 
     if(valor_moinho[i] > 14)
-      valor_moinho[i] = 100 - 5*profundidade;                        //vc foi tão profundo. Merece uma recompensa se chegou aqui na minimax.
+      valor_moinho[i] = 100;                        //vc foi tão profundo. Merece uma recompensa se chegou aqui na minimax.
     else if(valor_moinho[i] < -14)
-      valor_moinho[i] = -100 - 5*profundidade;                     // Heurística para impedir jogadas do inimigo
+      valor_moinho[i] = -100;                     // Heurística para impedir jogadas do inimigo
     heuristica_lixo+=valor_moinho[i];
   }
   return heuristica_lixo;
