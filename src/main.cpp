@@ -17,8 +17,8 @@ bool jogaTrilhaGrupo01(int * tab, int fase, int jor, int alt, Jogada &prox) {
     else if (saltoOk(jor, tab))
         escolheJogadaSalto(jor,tab, prox);
     else{
-        //minimax(tab, &prox, 0, alt, jor, fase);
-        poda_alpha_beta(tab, &prox, 0, alt, jor, fase, -infinite, infinite);
+        minimax(tab, &prox, 0, alt, jor, fase);
+        //poda_alpha_beta(tab, &prox, 0, alt, jor, fase, -infinite, infinite);
     
         //escolheJogadaMovimento(jor,tab, prox);
     }
