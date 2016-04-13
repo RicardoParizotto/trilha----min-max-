@@ -13,7 +13,7 @@ int jog=0;
 
 bool jogaTrilhaGrupo01(int * tab, int fase, int jor, int alt, Jogada &prox) {
     if (fase == FASEINSERCAOPECAS)
-        escolheJogadaInclusao(jor,tab, prox);
+        minimax_insercao(tab, &prox, 0, alt, jor, jog);
     else if (saltoOk(jor, tab))
         escolheJogadaSalto(jor,tab, prox);
     else{
@@ -27,11 +27,11 @@ bool jogaTrilhaGrupo01(int * tab, int fase, int jor, int alt, Jogada &prox) {
 bool jogaTrilhaGrupo02(int * tab, int fase, int jor, int alt, Jogada &prox) {
 
     if (fase == FASEINSERCAOPECAS)
-        escolheJogadaInclusao(jor,tab, prox);
+        minimax_insercao(tab, &prox, 0, alt, jor, jog);
     else if (saltoOk(jor, tab))
         escolheJogadaSalto(jor,tab, prox);
     else
-        escolheJogadaMovimento(jor,tab, prox);
+        minimax(tab, &prox, 0, alt, jor, fase);
     
     return true;
 }
@@ -80,7 +80,7 @@ int main(int argc, char ** argv) {
         int n = nrandsel;
         while (n > 0) {
             tpre = clock();
-	    printf("cu\n");
+        printf("cu\n");
             escolheJogadaInclusao(JOGBRANCO, tabuleiro, prox);
             tpos = clock();
             efetuaJogada(JOGBRANCO, jog, tabuleiro, prox);

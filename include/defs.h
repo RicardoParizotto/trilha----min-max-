@@ -67,12 +67,8 @@ int heuristicas_jogador_fase2(int * tab, int jor, int profundidade);
 int minimax(int *tab,Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
 
 int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int fase, int alpha, int beta);
-/*
-Jogada * jogaTrilhaMinMaxGrupo666(int *tab, int fase, int jor, int alt){
 
-}
-
-*/
+int minimax_insercao(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int jog);
 
 
 #endif
