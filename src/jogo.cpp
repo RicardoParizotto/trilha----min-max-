@@ -11,6 +11,8 @@
 #include <cstdio>
 using namespace std;
 
+
+//Testa se existe um moinho feito com a última jogada
 bool moinho_feito(int * tab, int peca, int peca_orig, int jor)  {
   for(int i = 0; i < N_MOINHOS; i++) {
     int soma = 0;
@@ -47,13 +49,13 @@ int heuristicas_jogador_fase2(int * tab, int jor, int profundidade) {
     for(int j = 0; j < 3; j++)  {
       k = moinho[i][j];
       if(tab[k] == jor)
-        valor_moinho[i]+=5;
+          valor_moinho[i]+=5;                     //caso possua uma peça amiga na posição
       else if(tab[k] != VAZIO)
-        valor_moinho[i]-=5;
+        valor_moinho[i]-=5;                        //caso exista uma peça inimiga na posição
       else{
-        valor_moinho[i]+=1;
+        valor_moinho[i]+=1;                       //caso esteja em branco
         for(e = 0; e < 3; e++){
-           int w = jogadas_validas[i][e];
+           int w = jogadas_validas[i][e];           //se estiver em branco, olha as jogadas perto
           if(w > -1 && tab[w] == jor)
             valor_moinho[i] += 3;
         }
@@ -62,7 +64,7 @@ int heuristicas_jogador_fase2(int * tab, int jor, int profundidade) {
 
 
     if(valor_moinho[i] > 14)
-      valor_moinho[i] = 100;
+      valor_moinho[i] = 100;                      //coloca um valor muito grande caso fazer trilha
     else if(valor_moinho[i] < -14)
       valor_moinho[i] = -100;                     // Heurística para impedir jogadas do inimigo
     heuristica_lixo+=valor_moinho[i];
@@ -96,7 +98,7 @@ int heuristicas_jogador_fase1_fase3(int * tab, int jor, int profundidade){    //
         valor_moinho[i]+=3;
     }
     if(valor_moinho[i] > 14)
-      valor_moinho[i] = 10;
+      valor_moinho[i] = 10;        //na etapa inicial o objetivo principal n é fazer trilha. POr isso essa recompensa é menor.
     else if(valor_moinho[i] < -14)
       valor_moinho[i] = -20; // Heurística para impedir jogadas do inimigo
     heuristica_lixo+=valor_moinho[i];
@@ -131,13 +133,13 @@ int minimax(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, 
                 for(q = 0; q < TAM_TABULEIRO; q++)tab2[q] = tab[q];//atualiza o tabuleiro para a futura jogada
                 tab2[i] = VAZIO;
                 tab2[j] = jor;
-                if(moinho_feito(tab2, j, i, jor))   { //remove aleatoriamente
+                if(moinho_feito(tab2, j, i, jor))   { //simula uma remoção de peça caso faça ummoinho com a jogada
                     int tmp, adv_min = infinite;
                     int pmin = -1;
                     for(q = 0; q < TAM_TABULEIRO; q++){
                         if(tab2[q] == adv){
                            tab2[q] = VAZIO;
-                           tmp = heuristicas_jogador_fase2(tab2, adv, profundidade);
+                           tmp = heuristicas_jogador_fase2(tab2, adv, profundidade);           //retira a melhor peça do oponente
                               if(tmp < adv_min)  {
                                   adv_min = tmp;
                                   pmin = q;
@@ -147,7 +149,7 @@ int minimax(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, 
                     }
                     jogada2.ret = pmin;
                 }
-                temp = minimax(tab2, jogada , profundidade + 1, max_prof, adv, fase);
+                temp = minimax(tab2, jogada , profundidade + 1, max_prof, adv, fase);             //recursão para uma profundidade maior da árvore de possibilidades
                 if(maxmin < temp && nodomax || temp < maxmin && !nodomax){
                     maxmin = temp;
                     jogada2.orig = i;
@@ -156,14 +158,14 @@ int minimax(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, 
             }
         }
     }
-    jogada->dest = jogada2.dest;
+    jogada->dest = jogada2.dest;                //atualização dos valores da variável passada por parametro
     jogada->orig = jogada2.orig;
     jogada->ret = jogada2.ret;
 
     return maxmin;
 }
 
-
+//busca para a etapa de inserção de peças
 int minimax_insercao(int * tab, Jogada *jogada, int profundidade, int max_prof, int jor, int jog){
     int maxmin = -infinite, temp, i, k, q, tab2[TAM_TABULEIRO], adv = proximoJogador(jor);
     Jogada jogada2;
@@ -199,6 +201,9 @@ int minimax_insercao(int * tab, Jogada *jogada, int profundidade, int max_prof, 
                 }
                 jogada2.ret = pmin;
             }
+            /*faz uma recursão, caso continue na mesma fase do jogo
+             * ou chama a busca para a segunda etapa, caso mudar de fase
+             */
             temp = (faseAtual(jog + 1)!= FASEINSERCAOPECAS)? minimax(tab2, jogada, profundidade + 1, max_prof, jor, jog+1 ):minimax_insercao(tab2, jogada, profundidade + 1, max_prof, jor, jog+1);
             tab2[i]=VAZIO;
             if(maxmin < temp && nodomax || temp < maxmin && !nodomax){
@@ -255,7 +260,7 @@ int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, i
                     }
                     jogada2.ret = pmin;
                 }
-
+                //teste da busca alpha beta.
                 if(alpha >= beta){maxmin = (nodomax)?alpha:beta; goto retorno;}
 
                 temp = poda_alpha_beta(tab2, jogada , profundidade + 1, max_prof, adv, fase, alpha, beta);
@@ -265,6 +270,7 @@ int poda_alpha_beta(int * tab, Jogada *jogada, int profundidade, int max_prof, i
                     jogada2.orig = i;
                     jogada2.dest = j;
                 }
+                //atualiza os valores de alpha e beta
                 if(!nodomax && beta < maxmin)
                     beta = maxmin;
                 if(nodomax && alpha > maxmin)

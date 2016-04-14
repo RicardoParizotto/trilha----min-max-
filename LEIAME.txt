@@ -5,6 +5,7 @@ Alunos: Rafael Hengen Ribeiro (rafaelhr.ribeiro@gmail.com), Ricardo Parizotto (r
 
 * Busca minimax para o jogo de trilha *
 
+
 1. Descrição:
 O trabalho consiste em uma implementação de buscas e funções heurísticas para realização de movimento inteligente
 no jogo de trilha.
@@ -25,8 +26,11 @@ Para executar basta executar o comando $ bin/trilha
 O programa mostrará o tabuleiro e as respectivas jogadas.
 
 5. Utilização das funções:
+
 Para utilização das funções minimax e poda_alpha_beta deve-se incluir o arquivo "include/defs.h".
-5.1. Função minimax
+
+
+5.1. Função minimax ~ minimax_salto ~ minimax_insercao
     5.1.1 - Protótipo:
         int minimax(int *tab,Jogada *jogada, int profundidade, int max_prof, int jor, int fase);
     5.1.2 - Descrição:
@@ -49,3 +53,14 @@ Para utilização das funções minimax e poda_alpha_beta deve-se incluir o arqu
         fase é um inteiro que representa a fase do jogo
         alpha é um inteiro utilizado na poda, deve-se inicializar em -infinito
         beta é um inteiro utilizado na poda, deve-se inicializar em +infinito
+
+5.3. Exemplo de utilização
+
+    if (fase == FASEINSERCAOPECAS)
+        minimax_insercao(tab, &prox, 0, alt, jor, jog);
+    else if (saltoOk(jor, tab))
+        minimax_salto(tab, &prox, 0, alt, jor, fase);
+        //escolheJogadaSalto(jor,tab, prox);
+    else
+        poda_alpha_beta(tab, &prox, 0, alt, jor, fase, -infinite, infinite);
+

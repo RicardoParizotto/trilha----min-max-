@@ -32,7 +32,7 @@ bool jogaTrilhaGrupo02(int * tab, int fase, int jor, int alt, Jogada &prox) {
     else if (saltoOk(jor, tab))
         escolheJogadaSalto(jor,tab, prox);
     else
-        minimax(tab, &prox, 0, alt, jor, fase);
+        escolheJogadaMovimento(jor,tab,prox);
 
     return true;
 }
